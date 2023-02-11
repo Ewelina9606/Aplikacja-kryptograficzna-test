@@ -33,8 +33,8 @@ long long operations::euklides(long long a, long long b) {
 	if (a > b) {
 		r[0] = a;
 		r[1] = b;
-		s[0] = 1;
-		s[1] = 0;
+		s[0] = 0;
+		s[1] = 1;
 	}
 	else {
 		r[0] = b;
