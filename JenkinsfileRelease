@@ -32,7 +32,6 @@ node {
                		break;
         	}
         	PROJECT_RELEASE_VERSION = split.join('.')
-		env.PROJECT_RELEASE_VERSION = $PROJECT_RELEASE_VERSION
         	echo "$PROJECT_CURRENT_VERSION"
         	sh "echo $PROJECT_RELEASE_VERSION"
         	sh 'git config --global user.email "ewelinakolba00@gmail.com"'
@@ -91,7 +90,6 @@ node {
                		break;
         	}
         	PROJECT_RELEASE_VERSION = split.join('.')
-		env.PROJECT_RELEASE_VERSION = $PROJECT_RELEASE_VERSION
         	sh "echo $PROJECT_RELEASE_VERSION"
         	sh 'git config --global user.email "ewelinakolba00@gmail.com"'
         	sh 'git config --global user.name "Ewelina9606"'
