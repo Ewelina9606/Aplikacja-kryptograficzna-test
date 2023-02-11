@@ -8,7 +8,14 @@ node {
          	istag=true
         }
         if (istag == false) {
-        	String PROJECT_CURRENT_VERSION = sh(returnStdout: true, script: "git tag --sort version:refname | tail -1").trim()
+            String PROJECT_CURRENT_VERSION = ""
+	    String PROJECT_RELEASE_VERSION = ""
+        	if (sh(script: "git tag --sort version:refname | tail -1") == null) {
+        	    PROJECT_CURRENT_VERSION = "0.0.0"
+            }
+            else {
+                PROJECT_CURRENT_VERSION = sh(script: "git tag --sort version:refname | tail -1").trim()
+            }
         	def split = PROJECT_CURRENT_VERSION.split('\\.')
         	switch (RELEASE_TYPE){
             		case "PATCH":
@@ -25,6 +32,7 @@ node {
                		break;
         	}
         	PROJECT_RELEASE_VERSION = split.join('.')
+		env.PROJECT_RELEASE_VERSION = $PROJECT_RELEASE_VERSION
         	echo "$PROJECT_CURRENT_VERSION"
         	sh "echo $PROJECT_RELEASE_VERSION"
         	sh 'git config --global user.email "ewelinakolba00@gmail.com"'
