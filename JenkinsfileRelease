@@ -1,0 +1,104 @@
+node {
+    checkout scm
+    stage('Release versioning') {
+	if ( GIT_REFERENCE == "origin/main" || GIT_REFERENCE.startsWith("origin/release")) {
+		istag=false
+        }
+        else {
+         	istag=true
+        }
+        if (istag == false) {
+        	String PROJECT_CURRENT_VERSION = sh(returnStdout: true, script: "git tag --sort version:refname | tail -1").trim()
+        	def split = PROJECT_CURRENT_VERSION.split('\\.')
+        	switch (RELEASE_TYPE){
+            		case "PATCH":
+                		split[2]=split[2].toInteger() +1
+                		break
+            		case "MINOR":
+                		split[1]=split[1].toInteger() +1
+                		split[2]='x'
+                		break;
+            		case "MAJOR":
+               			split[0]=split[0].toInteger() +1
+               			split[1]='x'
+               			split[2]='x'
+               		break;
+        	}
+        	PROJECT_RELEASE_VERSION = split.join('.')
+        	echo "$PROJECT_CURRENT_VERSION"
+        	sh "echo $PROJECT_RELEASE_VERSION"
+        	sh 'git config --global user.email "ewelinakolba00@gmail.com"'
+        	sh 'git config --global user.name "Ewelina9606"'
+		sh """git tag -a $PROJECT_RELEASE_VERSION -m "Set release version $PROJECT_RELEASE_VERSION" """
+           	withCredentials([usernamePassword(credentialsId: 'github-username-jenkins-2', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
+                	sh "git remote set-url origin https://$USERNAME:$PASSWORD@github.com/$USERNAME/aplikacja-kryptograficzna.git"
+		        sh "git push -f origin $GIT_REFERENCE --tags"
+            	}
+    	}
+    	else {
+    	    	String PROJECT_CURRENT_VERSION = sh(returnStdout: true, script: "git tag --sort version:refname | tail -1").trim()
+    		def split = PROJECT_CURRENT_VERSION.split('\\.')
+        	switch (RELEASE_TYPE){
+            	case "PATCH":
+            	    	if (split[2] == 'x') {
+            	        	split[2] ='0'
+            	    	}
+            	    	else {
+            	        	split[2]=split[2].toInteger() +1
+            	    	}
+                	if (split[0] == 'x') {
+                	    	split[0]='0'
+                	}
+                	if (split[1] == 'x') {
+                	 	split[1]='0'
+                	}
+                	break
+            	case "MINOR":
+                	if (split[1] == 'x') {
+            	        	split[1] ='0'
+            	    	}
+            	    	else {
+            	        	split[1]=split[1].toInteger() +1
+            	    	}
+                	if (split[0] == 'x') {
+                	    	split[0]='0'
+                	}
+                	if (split[2] == 'x') {
+                	    	split[2]='0'
+                	}
+                	break;
+            	case "MAJOR":
+               		if (split[0] == 'x') {
+          	        	split[0] ='0'
+            	    	}
+            	    	else {
+            	     	   	split[0]=split[0].toInteger() +1
+            	    	}
+               		if (split[2] == 'x') {
+                	    	split[2]='0'
+                	}
+                	if (split[1] == 'x') {
+                	    	split[1]='0'
+                	}
+               		break;
+        	}
+        	PROJECT_RELEASE_VERSION = split.join('.')
+		env.PROJECT_RELEASE_VERSION = $PROJECT_RELEASE_VERSION
+        	sh "echo $PROJECT_RELEASE_VERSION"
+        	sh 'git config --global user.email "ewelinakolba00@gmail.com"'
+        	sh 'git config --global user.name "Ewelina9606"'
+		sh """git tag -a $PROJECT_RELEASE_VERSION -m "Set release version $PROJECT_RELEASE_VERSION" """
+            	withCredentials([usernamePassword(credentialsId: 'github-username-jenkins-2', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
+                	sh "git remote set-url origin https://$USERNAME:$PASSWORD@github.com/$USERNAME/aplikacja-kryptograficzna.git"
+		        sh "git push -f origin $GIT_REFERENCE --tags"
+            	}
+    	}
+    }
+    stage('Build') {
+	sleep 150   
+	build job: "Build/$PROJECT_RELEASE_VERSION", wait:true, parameters: [
+        	string(name: 'VERSION', value: '${PROJECT_RELEASE_VERSION}')
+    	]
+    }
+    cleanWs()
+}
