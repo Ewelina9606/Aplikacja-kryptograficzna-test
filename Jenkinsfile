@@ -31,7 +31,6 @@ pipeline {
                 script {
                     if (env.TAG_NAME == env.BRANCH_NAME) 
                     {
-                        echo "RELEASE!!!!"
                         imagename = "ewelina9606/aplikacja-kryptograficzna:$BRANCH_NAME-$BUILD_NUMBER-RELEASE"  
                     }
                 }

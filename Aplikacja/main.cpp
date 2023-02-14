@@ -12,9 +12,6 @@
 #include <stdio.h>
 #include "operations.h"
 
-// long long powmd(long long a, long long b, long long c);
-// long long euklides(long long a, long long b);
-// bool proba(long long liczba);
 
 int main(int argc, char *argv[]) {
 	long long tryb=0;
@@ -110,13 +107,10 @@ int main(int argc, char *argv[]) {
 							x=static_cast<long long>(std::stoi(s));
 							szyfr.push_back(x);
 							s="";
-							//szyfr.push_back(32);
 						}
                     }
-					//std::cout<<"rozmiar vectora szfru: "<<szyfr.size()<<std::endl;
 
 					for (long long i = 0; i < szyfr.size(); i++) {
-                        //std::cout<< szyfr[i];
                         ascii.push_back(operation.powmd(szyfr[i], d, n));
                     }
                     std::cout << std::endl << "ODSZYFROWANA WIADOMOSC: " << std::endl;
