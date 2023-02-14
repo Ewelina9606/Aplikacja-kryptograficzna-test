@@ -62,7 +62,7 @@ int main(int argc, char* argv[]) {
 
 				std::cout << "Podaj wiadomosc: ";
 				std::cin.ignore(std::numeric_limits < std::streamsize >::max(), '\n');
-				std::cin >> message;
+				std::getline(std::cin, message);
 				std::cout << std::endl;
 
 				//------------------------------------------------------------------------------
