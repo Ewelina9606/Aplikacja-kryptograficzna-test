@@ -17,7 +17,7 @@ int main(int argc, char* argv[]) {
 	operations operation;
 
 	while (tryb != 3) {
-		long long  p, q, temp, tryb = 0, operacja = 0;
+		long long  p, q, tryb = 0, operacja = 0;
 		bool czy_pierwsza = 0;
 		long long n, fi, e, d = -1, s;
 		std::vector <long long> ascii;
@@ -147,8 +147,8 @@ int main(int argc, char* argv[]) {
 				int dlugosc = message.length();
 
 				for (int i = 0; i < dlugosc; i++) {
-					if (message[i] > 95) //gdy napotkamy małą literę zamieniamy ją na dużą
-						message[i] = (char)(message[i] - 32); //przesuwając o 32 miejsca w kodzie ASCII
+					if (message[i] > 95)
+						message[i] = (char)(message[i] - 32);
 				}
 				std::cout << message << std::endl;
 				for (int i = 0; i < dlugosc; i++) {
@@ -176,6 +176,7 @@ int main(int argc, char* argv[]) {
 					}
 					if (!flag) std::cout << message[i];
 				}
+				std::cout << std::endl;
 			}
 			else {
 				std::cout << "Podaj szyfr: ";
@@ -184,10 +185,9 @@ int main(int argc, char* argv[]) {
 				std::cout << std::endl;
 				int dlugosc = message.length();
 				for (int i = 0; i < dlugosc; i++) {
-					if (message[i] > 95) //gdy napotkamy małą literę zamieniamy ją na dużą
-						message[i] = (char)(message[i] - 32); //przesuwając o 32 miejsca w kodzie ASCII
+					if (message[i] > 95) 
+						message[i] = (char)(message[i] - 32);
 				}
-				//std::cout << temp << std::endl;
 				for (int i = 0; i < dlugosc; i++) {
 					x = message[i];
 					flag = 0;
